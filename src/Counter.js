@@ -1,47 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Counter extends Component {
-  constructor(props) {
-    console.log('Constructor');
-    super(props);
+const Counter = () => {
+  const [counter, setCounter] = React.useState(0);
 
-    this.state = {
-      counter: 0
-    }
-
-    this.incrementCounter = this.incrementCounter.bind(this);
+  const incrementCounter = () => {
+    setCounter(counter + 1);
   }
 
-  // Called after render
-  componentDidMount() {
-    console.log('Component Did Mount');
-    console.log('_____________');
+  const decrementCounter = () => {
+    setCounter(counter - 1);
   }
 
-  incrementCounter(e) {
-    e.preventDefault();
 
-    this.setState({
-      counter: this.state.counter + 1
-    })
-  }
-  render() {
-    console.log('Render');
-    const { counter } = this.state; 
-
-    return (
-      <div>
-        <div>{counter}</div>
-        <button onClick={this.incrementCounter}>Increment Counter</button>
-      </div>
-    )
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshop) {
-    console.log('Component Did Update');
-  }
-
-  componentWillUnmount() {
-    console.log('Component will UnMount');
-  }
+  return (
+    <div>
+      <button onClick={incrementCounter}>Increment Counter</button>
+      <button onClick={decrementCounter}>Decrement Counter</button>
+      <div>{counter}</div>
+    </div>
+  )
 }
+
+export default Counter;

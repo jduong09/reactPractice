@@ -3,27 +3,61 @@ import React from 'react';
 import Counter from './Counter';
 
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+const App = () => {
+  const [mount, setMount] = React.useState(true);
+  const [color, setColor] = React.useState('black');
 
-    this.state = {
-      mount: true
+  const mountCounter = () => {
+    setMount(true);
+  }
+
+  const unmountCounter = () => {
+    setMount(false);
+  }
+
+  React.useEffect(() => {
+    // componentDidUpdate
+    console.log('ComponentDidUpdate?');
+    const changeColorOnClick = () => {
+      if (color === 'black') {
+        setColor('red');
+      } else {
+        setColor('black');
+      }
     }
 
-    this.mountCounter = () => this.setState({ mount: true});
-    this.unmountCounter = () => this.setState({ mount: false });
-  }
+    // componentDidMount
+    console.log('ComponentDidMount?');
+    document.addEventListener('click', changeColorOnClick);
 
-  render() {
-    return (
-      <div className="App">
-        <button onClick={this.mountCounter} disabled={this.state.mount}>Mount Counter</button>
-        <button onClick={this.unmountCounter} disabled={!this.state.mount}>unmountCounter Counter</button>
-        {this.state.mount ? <Counter /> : null}
+    // ComponentWillUnmount
+    return () => {
+      console.log('Component will unmount');
+      document.removeEventListener('click', changeColorOnClick);
+    }
+  }, [color]);
+
+  return (
+    <div className="App">
+      <div 
+        id="myDiv"
+        style={{ 
+          color: 'white',
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          left: '50%',
+          right: '50%',
+          backgroundColor: color,
+        }}
+      >
+        This div can change colors. Click on me!
       </div>
-    );
-  }
+      <button onClick={mountCounter} disabled={mount}>Mount Counter</button>
+      <button onClick={unmountCounter} disabled={!mount}>unmountCounter Counter</button>
+      {mount ? <Counter /> : null}
+    </div>
+  );
 }
 
 export default App;
